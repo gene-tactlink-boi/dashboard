@@ -15,17 +15,17 @@ from google.cloud import storage
 # --- CONFIGURATION (Load from Environment Variables for Security) ---
 # GOOGLE PLAY
 GCP_JSON = json.loads(os.environ.get('GCP_JSON_KEY')) # Service Account Key
-GCP_BUCKET_ID = os.environ.get('GCP_BUCKET_ID')       # e.g., pubsite_prod_rev_...
-PACKAGE_NAME = os.environ.get('ANDROID_PACKAGE_NAME') # e.g., com.example.app
+GCP_BUCKET_ID = os.environ.get('GCP_BUCKET_ID', '').strip()       # e.g., pubsite_prod_rev_...
+PACKAGE_NAME = os.environ.get('ANDROID_PACKAGE_NAME', '').strip() # e.g., com.example.app
 
 # APP STORE CONNECT
-APPLE_KEY_ID = os.environ.get('APPLE_KEY_ID')
-APPLE_ISSUER_ID = os.environ.get('APPLE_ISSUER_ID')
-APPLE_PRIVATE_KEY = os.environ.get('APPLE_PRIVATE_KEY') # Content of .p8 file
-APPLE_VENDOR_ID = os.environ.get('APPLE_VENDOR_ID')     # Starts with 8...
+APPLE_KEY_ID = os.environ.get('APPLE_KEY_ID', '').strip()
+APPLE_ISSUER_ID = os.environ.get('APPLE_ISSUER_ID', '').strip()
+APPLE_PRIVATE_KEY = os.environ.get('APPLE_PRIVATE_KEY') # Content of .p8 file (don't strip, might break key format)
+APPLE_VENDOR_ID = os.environ.get('APPLE_VENDOR_ID', '').strip()     # Starts with 8...
 
 # GOOGLE SHEETS
-SHEET_ID = os.environ.get('SHEET_ID') # ID from the URL of your Google Sheet
+SHEET_ID = os.environ.get('SHEET_ID', '').strip() # ID from the URL of your Google Sheet
 SHEET_TAB_NAME = 'Data'
 
 def get_google_play_data(target_date):
