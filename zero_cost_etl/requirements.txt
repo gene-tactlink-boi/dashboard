@@ -1,0 +1,6 @@
+google-cloud-storage
+gspread
+oauth2client
+requests
+PyJWT
+pandas

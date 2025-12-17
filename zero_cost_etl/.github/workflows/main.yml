@@ -1,0 +1,36 @@
+name: Daily Data Sync
+
+on:
+  schedule:
+    # Runs at 06:00 UTC every day
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync_data:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run Sync Script
+      env:
+        GCP_JSON_KEY: ${{ secrets.GCP_JSON_KEY }}
+        GCP_BUCKET_ID: ${{ secrets.GCP_BUCKET_ID }}
+        ANDROID_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME }}
+        APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+        APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
+        APPLE_PRIVATE_KEY: ${{ secrets.APPLE_PRIVATE_KEY }}
+        APPLE_VENDOR_ID: ${{ secrets.APPLE_VENDOR_ID }}
+        SHEET_ID: ${{ secrets.SHEET_ID }}
+      run: python daily_sync.py
