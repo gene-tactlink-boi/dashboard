@@ -11,6 +11,7 @@ import pandas as pd
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from google.cloud import storage
+from google.api_core.exceptions import Forbidden
 
 # --- CONFIGURATION (Load from Environment Variables for Security) ---
 # GOOGLE PLAY
@@ -47,11 +48,20 @@ def get_google_play_data(target_date):
     blob_name = f"stats/installs/installs_{PACKAGE_NAME}_{year_month}_overview.csv"
     
     blob = bucket.blob(blob_name)
-    if not blob.exists():
-        print(f"File {blob_name} not found (maybe start of month?).")
-        return []
+    
+    try:
+        if not blob.exists():
+            print(f"File {blob_name} not found (maybe start of month?).")
+            return []
 
-    content = blob.download_as_text(encoding='utf-16') # Google CSVs are often UTF-16
+        content = blob.download_as_text(encoding='utf-16') # Google CSVs are often UTF-16
+    except Forbidden:
+        print(f"ERROR: Permission denied accessing {blob_name}.")
+        print(f"Please ensure the service account {client.service_account_email} has 'Storage Object Viewer' permission on bucket {GCP_BUCKET_ID}.")
+        return []
+    except Exception as e:
+        print(f"ERROR: Failed to download file: {e}")
+        return []
     
     # Parse CSV
     data = []
