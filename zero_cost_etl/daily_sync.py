@@ -37,14 +37,9 @@ def get_google_play_data(target_date):
     # Authenticate
     client = storage.Client.from_service_account_info(GCP_JSON)
     
-    print(f"DEBUG: GCP_BUCKET_ID type: {type(GCP_BUCKET_ID)}")
-    print(f"DEBUG: GCP_BUCKET_ID length: {len(GCP_BUCKET_ID)}")
-    if len(GCP_BUCKET_ID) > 0:
-        print(f"DEBUG: First char is alphanumeric: {GCP_BUCKET_ID[0].isalnum()}")
-        print(f"DEBUG: Last char is alphanumeric: {GCP_BUCKET_ID[-1].isalnum()}")
-        print(f"DEBUG: Repr of bucket ID: {repr(GCP_BUCKET_ID)}")
-    
-    bucket = client.get_bucket(GCP_BUCKET_ID)
+    # Use client.bucket() instead of get_bucket() to avoid making an API call 
+    # that requires storage.buckets.get permission.
+    bucket = client.bucket(GCP_BUCKET_ID)
 
     # Construct file path: stats/installs/installs_PACKAGE_YYYYMM_overview.csv
     # Note: Google updates the SAME monthly file every day.
