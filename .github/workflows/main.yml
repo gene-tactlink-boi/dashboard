@@ -21,7 +21,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install -r requirements.txt
+        pip install -r zero_cost_etl/requirements.txt
 
     - name: Run Sync Script
       env:
@@ -33,4 +33,4 @@ jobs:
         APPLE_PRIVATE_KEY: ${{ secrets.APPLE_PRIVATE_KEY }}
         APPLE_VENDOR_ID: ${{ secrets.APPLE_VENDOR_ID }}
         SHEET_ID: ${{ secrets.SHEET_ID }}
-      run: python daily_sync.py
+      run: python zero_cost_etl/daily_sync.py
